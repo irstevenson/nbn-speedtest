@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Speedtest Results</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+    .mdl-card {
+        width: 100%;
+    }
+    </style>
+<head>
+<body>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">NBN Speed Tracking</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--10-col">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Heatmap of speed Mb/s</h2>
+                </div>
+                <div class="mdl-card__media">
+                    <div id="heatmap"></div>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    Hover over the above to see details for each datapoint.
+                    Points are in Mb/s; Time data is UTC - to convert to local
+                    time +11.
+                </div>
+            </div>
+
+            <h2>About</h2>
+            <p>In December 2016 I had noticed a decrease in the speed of my 25Mb/s FTTH NBN
+            connection. So I decided I would capture some data and see what pattern there was.</p>
+
+            <h2>How</h2>
+            <p>To achieve this, I decided to run a crond job on my server to run the speedtest-cli
+            tool every 15 minutes and store in a CSV. This resultant CSV I then processed with
+            python to generate a JSON file that has the data in the format required for a heatmap
+            generated (above) with <a href="https://plot.ly/javascript/">plotly.js</a>.</p>
+
+            <h2>Evaluation</h2>
+            <p>The heatmap clearly shows two things:
+            <ol>
+                <li>That at the start of January there was a general decrease in download speed;
+                and</li>
+                <li>There is a pattern of significant speed decrease each evening between ~09:45 UTC
+                and ~11:30 UTC (which local time is ~20:45 and ~21:30).</li>
+            </ol>
+            The main takeaway from that then is that at night when everyone (in the street) sits
+            down to relax - between about 8:30pm and 10pm - the NBN starts to struggle. (And I say
+            in the street, as our usage is pretty lite on - and non-existent many nights).</p>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+    </div>
+    </main>
+</div>
+    <script>
+    Plotly.d3.json("speedtest.json", function(data) {
+        data.type = 'heatmap';
+        Plotly.newPlot( 'heatmap', [data] );
+    });
+    </script>
+</body>
+</html>
