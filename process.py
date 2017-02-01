@@ -50,13 +50,7 @@ def process_row( row, value_col ):
     # [:5] so that we just get hh:mm
     return (date_time[0], date_time[1][:5], row[value_col])
 
-# !! DELETE ME !!
-def quick_test():
-    row  = ['2167', 'Internode', 'Hobart', '2017-01-24T23:00:01.949596', '9.757502716624701', '8.346', '23280669.80028002', '3885850.466667056']
-    print process_row( row, 6 )
-
 def main():
-    #quick_test()
     print json.dumps(
         process_file( 'speedtest.csv' ),
         sort_keys=True, indent=4, separators=(',', ': ') )
